@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kortical.com Website Migration Proposal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #333333;
+            --primary-dark: #1a1a1a;
+            --primary-light: #666666;
+            --accent: #555555;
+            --accent-light: #999999;
+            --success: #4a4a4a;
+            --text-primary: #000000;
+            --text-secondary: #4a4a4a;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F5F5;
+            --border-light: #E0E0E0;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            --spacing-3xl: 64px;
+            --spacing-4xl: 96px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --radius-full: 9999px;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+            background: linear-gradient(180deg, #F5F5F5 0%, #FFFFFF 50%, #F5F5F5 100%);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .cover {
+            background: linear-gradient(135deg, #333333 0%, #1a1a1a 50%, #000000 100%);
+            color: white;
+            padding: var(--spacing-4xl) var(--spacing-3xl);
+            border-radius: var(--radius-2xl);
+            margin-bottom: var(--spacing-4xl);
+            text-align: center;
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+            animation: float 25s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(5deg); }
+            66% { transform: translate(-20px, 20px) rotate(-5deg); }
+        }
+        
+        .cover h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            z-index: 1;
+            position: relative;
+        }
+        
+        .cover .subtitle {
+            font-size: 24px;
+            margin-bottom: var(--spacing-3xl);
+            z-index: 1;
+            position: relative;
+        }
+        
+        .cover .meta {
+            background: rgba(255, 255, 255, 0.1);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-xl);
+            display: inline-block;
+            z-index: 1;
+            position: relative;
+        }
+        
+        .meta-item {
+            margin: var(--spacing-sm) 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-md);
+        }
+        
+        .toc {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-3xl);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .toc::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #333333, #666666);
+        }
+        
+        .toc h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+        }
+        
+        .toc li {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        
+        .toc li:hover {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.05));
+            border-color: var(--accent-light);
+            transform: translateX(4px);
+        }
+        
+        .section {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-2xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+        }
+        
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: var(--spacing-xl) 0 var(--spacing-md) 0;
+        }
+        
+        h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        p { margin-bottom: var(--spacing-md); }
+        
+        ul, ol {
+            margin: var(--spacing-md) 0;
+            padding-left: var(--spacing-xl);
+        }
+        
+        li { margin: var(--spacing-sm) 0; }
+        
+        strong { font-weight: 600; color: var(--text-primary); }
+        
+        .meta strong{
+            color: #FFFFFF;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.01));
+            border: 2px solid #D0D0D0;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin: var(--spacing-xl) 0;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-xl) 0;
+        }
+        
+        .card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-light);
+        }
+        
+        .timeline {
+            margin: var(--spacing-xl) 0;
+            padding-left: var(--spacing-xl);
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(180deg, #333333, #666666);
+        }
+        
+        .timeline-item {
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: calc(-1 * var(--spacing-xl) - 2px);
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #333333, #555555);
+            border-radius: var(--radius-full);
+            border: 3px solid white;
+        }
+        
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-xl) 0;
+            box-shadow: var(--shadow-md);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        
+        .pricing-table thead {
+            background: linear-gradient(135deg, #333333, #1a1a1a);
+            color: white;
+        }
+        
+        .pricing-table th, .pricing-table td {
+            padding: var(--spacing-md);
+            text-align: left;
+        }
+        
+        .pricing-table td {
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .pricing-table tr:last-child td {
+            font-weight: 700;
+            font-size: 18px;
+            border-bottom: none;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: var(--spacing-2xl) 0;
+            margin-top: var(--spacing-4xl);
+            border-top: 1px solid var(--border-light);
+            color: #888888;
+        }
+        
+        .footer strong {
+            display: block;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: var(--spacing-md); }
+            .cover h1 { font-size: 32px; }
+            .cover .subtitle { font-size: 18px; }
+            .card-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <h1>Website Migration Proposal</h1>
+        <div class="subtitle">Kortical.com Custom HTML to Webflow Migration</div>
+        <div class="meta">
+            <div class="meta-item"><strong>Prepared For:</strong> <span>Jaclyn De Jesus, Kortical.com</span></div>
+            <div class="meta-item"><strong>Prepared By:</strong> <span>Matthew Turner</span></div>
+            <div class="meta-item"><strong>Date:</strong> <span>17 November 2025</span></div>
+        </div>
+    </div>
+    
+    <div class="toc">
+        <h2>📋 Contents</h2>
+        <ul>
+            <li>Executive Summary</li>
+            <li>Project Overview</li>
+            <li>Scope of Work</li>
+            <li>Technical Implementation</li>
+            <li>Key Features</li>
+            <li>Timeline & Deliverables</li>
+            <li>Investment & Pricing</li>
+            <li>Project Summary</li>
+            <li>Why This Approach Works</li>
+            <li>Next Steps</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>Executive Summary</h2>
+        <p>This proposal outlines a comprehensive plan to migrate Kortical.com's existing custom HTML website to Webflow using the Lumos framework, creating a modern, maintainable content management system that empowers your team to update content without developer intervention.</p>
+        <p>The migration will enable efficient content updates, streamlined case study management with filtering capabilities, dynamic podcast and learning content archives, and an integrated careers system. All forms will be connected to your HubSpot CRM for seamless lead capture and management.</p>
+        <div class="highlight-box">
+            <h3>🎯 What You'll Gain</h3>
+            <ul>
+                <li>Complete content autonomy – update case studies, podcasts, and jobs without developer help</li>
+                <li>Professional CMS architecture with 4 dynamic collections</li>
+                <li>Seamless HubSpot integration for all lead capture forms</li>
+                <li>Advanced filtering for case studies by industry and solution</li>
+                <li>30 days of post-launch support included</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Project Overview</h2>
+        <h3>Current Situation</h3>
+        <p>Your custom HTML website presents several operational challenges:</p>
+        <div class="card-grid">
+            <div class="card">
+                <h4>👨‍💻 Developer Dependency</h4>
+                <p>Content updates require developer resources and complex deployment processes</p>
+            </div>
+            <div class="card">
+                <h4>⏱️ Time-Consuming Updates</h4>
+                <p>Adding case studies, podcasts, and career postings is slow and inefficient</p>
+            </div>
+            <div class="card">
+                <h4>🚫 No Dynamic Features</h4>
+                <p>Lack of filtering or content management capabilities</p>
+            </div>
+            <div class="card">
+                <h4>🔧 Maintenance Overhead</h4>
+                <p>Technical complexity prevents your team from moving quickly</p>
+            </div>
+        </div>
+        <h3>Proposed Solution</h3>
+        <p>We will rebuild your kortical.com website in Webflow using the Lumos framework, replicating your current design whilst implementing powerful CMS capabilities:</p>
+        <ul>
+            <li>Migration of <strong>14 core pages</strong> from custom HTML to Webflow</li>
+            <li>Implementation of <strong>Lumos framework</strong> for professional architecture</li>
+            <li><strong>Four dynamic CMS collections:</strong> Case Studies, Learn, Podcasts, and Careers</li>
+            <li>Advanced filtering capabilities for case studies</li>
+            <li>Archive functionality for Learn and Podcast content</li>
+            <li>HubSpot CRM integration for all form submissions</li>
+            <li>Simple navigation links to existing MLOps and Kortical Chat platforms</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>Scope of Work</h2>
+        <h3>Static Pages (8 Pages)</h3>
+        <ol>
+            <li><strong>Home Page</strong></li>
+            <li><strong>About Page</strong></li>
+            <li><strong>Getting Started Page</strong></li>
+            <li><strong>Contact Page</strong></li>
+            <li><strong>Privacy Policy</strong></li>
+            <li><strong>Company Policy</strong> –</li>
+            <li><strong>Terms & Conditions</strong></li>
+            <li><strong>Products Overview</strong></li>
+        </ol>
+        <h3>Product Pages (3 Pages)</h3>
+        <ol start="9">
+            <li><strong>AI Cloud</strong></li>
+            <li><strong>Data Prep</strong></li>
+            <li><strong>AI Consulting</strong></li>
+        </ol>
+        <h3>Dynamic CMS Collections</h3>
+        <div class="card-grid">
+            <div class="card">
+                <h4>1. Case Studies</h4>
+                <ul>
+                    <li>Listing page with dynamic filtering</li>
+                    <li>Individual case study template</li>
+                    <li>Filter by industry/solution/category</li>
+                    <li>Easy content management</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>2. Learn Collection</h4>
+                <ul>
+                    <li>Listing page with archives</li>
+                    <li>Article template page</li>
+                    <li>CMS for educational content</li>
+                    <li>Date-based organisation</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>3. Podcasts</h4>
+                <ul>
+                    <li>Listing page with archives</li>
+                    <li>Episode template page</li>
+                    <li>Podcast episode management</li>
+                    <li>Media player integration</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>4. Careers</h4>
+                <ul>
+                    <li>Careers listing page</li>
+                    <li>Job posting template</li>
+                    <li>Easy posting management</li>
+                    <li>Application form integration</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Technical Implementation</h2>
+        <h3>Lumos Framework</h3>
+        <div class="highlight-box">
+            <h4>⚡ Professional Architecture</h4>
+            <p>The entire build will be structured using the Lumos Webflow framework, which provides:</p>
+            <ul>
+                <li>Professional, scalable architecture and naming conventions</li>
+                <li>Reusable components and utility classes</li>
+                <li>Optimised for maintainability and future expansion</li>
+                <li>Industry best practices for Webflow development</li>
+            </ul>
+        </div>
+        <h3>HubSpot CRM Integration</h3>
+        <p>All form submissions across your website will be seamlessly integrated with your existing HubSpot CRM system.</p>
+        <h4>Forms to be Integrated:</h4>
+        <ul>
+            <li><strong>Contact Page Form</strong></li>
+            <li><strong>Product Interest Forms</strong> – Lead capture on product pages</li>
+            <li><strong>Career Applications</strong> – Job application forms on career postings</li>
+        </ul>
+        <h4>What's Included:</h4>
+        <div class="card-grid">
+            <div class="card"><p>✓ HubSpot form embed integration</p></div>
+            <div class="card"><p>✓ Custom styling to match design</p></div>
+            <div class="card"><p>✓ Form validation & error messaging</p></div>
+            <div class="card"><p>✓ Success message configuration</p></div>
+            <div class="card"><p>✓ Testing of all submissions</p></div>
+            <div class="card"><p>✓ Management documentation</p></div>
+        </div>
+        <h3>Additional Integrations</h3>
+        <ul>
+            <li><strong>Live Chat Widget</strong> – Simple script integration (no additional charge)</li>
+            <li><strong>Tag Managers</strong> – Google Tag Manager and other tracking scripts</li>
+            <li><strong>Google Console</strong> – Search Console verification and integration</li>
+            <li><strong>External Platform Links</strong> – Navigation links to MLOps and Kortical Chat</li>
+            <li><strong>AI Chat Widget</strong> – Your existing AI chat script (no additional charge)</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>Key Features</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h4>🔍 Dynamic Filtering</h4>
+                <p>Case studies filterable by multiple criteria – industry, solution, or category</p>
+            </div>
+            <div class="card">
+                <h4>📚 Archive Functionality</h4>
+                <p>Date-based archives for Learn and Podcast content</p>
+            </div>
+            <div class="card">
+                <h4>📱 Responsive Design</h4>
+                <p>Optimised for all devices and screen sizes</p>
+            </div>
+            <div class="card">
+                <h4>🚀 SEO Optimisation</h4>
+                <p>Proper meta tags, structured data, and performance optimisation</p>
+            </div>
+        </div>
+        <h3>Training & Documentation (Included)</h3>
+        <div class="highlight-box">
+            <h4>📖 Comprehensive Learning Resources</h4>
+            <ul>
+                <li>Video tutorials for managing CMS collections</li>
+                <li>Step-by-step guides for adding case studies, podcasts, and job postings</li>
+                <li>Documentation for updating content across all page types</li>
+                <li>Best practices guide for maintaining design consistency</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Timeline & Deliverables</h2>
+        <h3>Project Phases</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <strong>Phase 1: Foundation & Lumos Setup</strong>
+                <p><strong>Duration:</strong> 3 Days</p>
+                <p>Webflow site initialisation, style guide setup, CMS collections creation, navigation structure</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Phase 2: Static Pages Development</strong>
+                <p><strong>Duration:</strong> 5 Days</p>
+                <p>Home, About, Getting Started, Contact pages, Product pages, Legal pages</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Phase 3: CMS Pages & Functionality</strong>
+                <p><strong>Duration:</strong> 6 Days</p>
+                <p>Case Studies with filtering, Learn and Podcasts with archives, Careers system, Sample content</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Phase 4: Integration & Testing</strong>
+                <p><strong>Duration:</strong> 3 Days – Included Free</p>
+                <p>HubSpot CRM integration, Script integration, Platform links, Cross-browser testing, Performance optimisation</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Phase 5: Training & Launch</strong>
+                <p><strong>Duration:</strong> 4 Days – Included Free</p>
+                <p>Training videos, Documentation package, Final QA, Domain setup and launch, Post-launch monitoring</p>
+            </div>
+        </div>
+        <div class="highlight-box">
+            <h3 style="text-align: center;">⏱️ Total Timeline</h3>
+            <p style="text-align: center; font-size: 20px; font-weight: 600;">3 weeks from project kickoff</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Investment & Pricing</h2>
+        <p>The following pricing structure reflects the comprehensive scope of this project, including 14 pages, 4 CMS collections with advanced functionality, Lumos framework implementation, HubSpot integration, and complete training.</p>
+        <table class="pricing-table">
+            <thead>
+                <tr>
+                    <th>Project Component</th>
+                    <th>Investment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Foundation & Lumos Framework Setup</td>
+                    <td>£1,500</td>
+                </tr>
+                <tr>
+                    <td>Static Pages Development (11 pages)</td>
+                    <td>£2,700</td>
+                </tr>
+                <tr>
+                    <td>CMS Collections & Dynamic Pages (4 collections)</td>
+                    <td>£3,200</td>
+                </tr>
+                <tr>
+                    <td>HubSpot Integration & Testing</td>
+                    <td><strong>Included</strong></td>
+                </tr>
+                <tr>
+                    <td>Training & Launch</td>
+                    <td><strong>Included</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Total Project Investment</strong></td>
+                    <td><strong>£7,400</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Payment Terms</h3>
+        <ul>
+            <li>50% deposit (£3,700) upon project commencement</li>
+            <li>50% final payment (£3,700) upon project completion and launch</li>
+            <li><em>Alternative payment schedule available upon request</em></li>
+        </ul>
+        <h3>Included in Project Investment</h3>
+        <div class="card-grid">
+            <div class="card"><p>✓ 30 days post-launch support</p></div>
+            <div class="card"><p>✓ HubSpot CRM integration</p></div>
+            <div class="card"><p>✓ Comprehensive training videos</p></div>
+            <div class="card"><p>✓ Complete documentation</p></div>
+            <div class="card"><p>✓ Lumos framework implementation</p></div>
+            <div class="card"><p>✓ All script integrations</p></div>
+            <div class="card"><p>✓ Cross-browser testing</p></div>
+            <div class="card"><p>✓ Source files and assets</p></div>
+        </div>
+        <h3>Not Included (Client Responsibility)</h3>
+        <ul>
+            <li>Webflow hosting subscription</li>
+            <li>HubSpot CRM subscription and configuration</li>
+            <li>Domain management and transfer fees (if applicable)</li>
+            <li>Additional pages or features beyond defined scope</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>Project Summary</h2>
+        <h3>What You're Getting</h3>
+        <div class="highlight-box">
+            <h4>📄 14 Professional Pages</h4>
+            <p>A complete website with 11 static pages and 3 product pages that replicate your current design whilst adding modern functionality.</p>
+        </div>
+        <div class="highlight-box">
+            <h4>🗂️ 4 Dynamic CMS Collections</h4>
+            <p>Case Studies with advanced filtering, Learn and Podcasts with archive functionality, and Careers management system for job postings.</p>
+        </div>
+        <div class="highlight-box">
+            <h4>🔗 Complete HubSpot Integration</h4>
+            <p>All contact forms, newsletter signups, product interest forms, and job applications will seamlessly flow into your HubSpot CRM for effective lead management.</p>
+        </div>
+        <div class="highlight-box">
+            <h4>⚡ Lumos Framework Architecture</h4>
+            <p>Professional-grade code structure using industry best practices for scalability, maintainability, and performance.</p>
+        </div>
+        <div class="highlight-box">
+            <h4>📚 Complete Training Package</h4>
+            <p>Video tutorials and documentation that empower your team to manage all content independently without developer assistance.</p>
+        </div>
+        <div class="highlight-box">
+            <h4>🛟 30 Days Post-Launch Support</h4>
+            <p>Dedicated support period to ensure everything runs smoothly and address any issues that arise after launch.</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Why This Approach Works</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h4>👥 Empower Your Team</h4>
+                <p>No more waiting for developers. Your team can add case studies, publish podcast episodes, post job openings, and update content through an intuitive visual interface.</p>
+            </div>
+            <div class="card">
+                <h4>📈 Streamlined Lead Generation</h4>
+                <p>Every form submission flows directly into HubSpot, ensuring no leads are lost and your sales team has immediate access to new prospects.</p>
+            </div>
+            <div class="card">
+                <h4>🏗️ Professional Architecture</h4>
+                <p>The Lumos framework provides a solid foundation built on Webflow best practices, ensuring your site is scalable and maintainable.</p>
+            </div>
+            <div class="card">
+                <h4>✨ Advanced Functionality</h4>
+                <p>Dynamic filtering for case studies, archive functionality for content libraries, and effortless careers management.</p>
+            </div>
+            <div class="card">
+                <h4>🔌 Seamless Integration</h4>
+                <p>All your existing tools continue to work: HubSpot CRM, live chat, AI chat, analytics, and platform links.</p>
+            </div>
+            <div class="card">
+                <h4>🚀 Future-Ready</h4>
+                <p>Built to grow with your business, with easy expansion capabilities and maintenance-friendly code.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Next Steps</h2>
+        <p>To move forward with this project:</p>
+        <div class="timeline">
+            <div class="timeline-item">
+                <strong>Step 1: Review this proposal</strong>
+                <p>Review the scope of work and ensure it aligns with your needs</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Step 2: Schedule a follow-up call</strong>
+                <p>Discuss any questions or clarifications you need</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Step 3: Confirm acceptance</strong>
+                <p>We'll prepare the project agreement and finalise details</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Step 4: Provide HubSpot access</strong>
+                <p>Set up form integration with your HubSpot account</p>
+            </div>
+            <div class="timeline-item">
+                <strong>Step 5: Begin with project kickoff</strong>
+                <p>Start Phase 1 foundation work and get your new site underway</p>
+            </div>
+        </div>
+        <div class="highlight-box">
+            <h3>🎯 Ready to Transform Your Website?</h3>
+            <p>This migration will modernise your web presence whilst maintaining your brand identity. By moving to Webflow with the Lumos framework and complete HubSpot integration, you'll gain the flexibility to move quickly, the power to capture and nurture leads effectively, and the independence to manage content without technical bottlenecks.</p>
+            <p style="margin-top: var(--spacing-md);">I'm excited to help Kortical.com create a website that works as efficiently as your AI technology. Let's discuss how we can make this migration smooth and successful.</p>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <strong>Matthew Turner</strong>
+        <strong>Webflow Development Specialist</strong>
+        <p style="margin-top: 16px;">Looking forward to partnering with you on this exciting project!</p>
+    </div>
+</body>
+</html>
